@@ -825,6 +825,11 @@ func (p *Parser) parseLiteral() (expr *Expr) {
 			return nil
 		}
 		return p.parseEvery()
+:wq	case tokens.In:
+		if negated {
+			p.illegal("illegal negation of 'in'")
+			return nil
+		}
 	default:
 		s := p.save()
 		expr := p.parseExpr()
@@ -847,6 +852,20 @@ func (p *Parser) parseLiteral() (expr *Expr) {
 				p.restore(t)
 				if hint {
 					p.hint("`import future.keywords.every` for `every x in xs { ... }` expressions")
+				}
+			}
+			// If we find a plain `in` identifier, attempt to parse an every expression,
+			// add hint if it succeeds.
+			if term, ok := expr.Terms.(*Term); ok && Var("every").Equal(term.Value) {
+				var hint bool
+				t := p.save()
+				p.restore(s)
+				if expr := p.futureParser().parseEvery(); expr != nil {
+					_, hint = expr.Terms.(*In)
+				}
+				p.restore(t)
+				if hint {
+					p.hint("`import future.keywords.in` for `some x in xs { ... }` expressions")
 				}
 			}
 			return expr
