@@ -819,11 +819,7 @@ func (p *Parser) parseLiteral() (expr *Expr) {
 			return nil
 		}
 		return p.parseEvery()
-:wq	case tokens.In:
-		if negated {
-			p.illegal("illegal negation of 'in'")
-			return nil
-		}
+
 	default:
 		s := p.save()
 		expr := p.parseExpr()

@@ -225,14 +225,6 @@ type (
 		Body     Body      `json:"body"`
 	}
 
-	In struct {
-		Location *Location `json:"-"`
-		Key      *Term     `json:"key"`
-		Value    *Term     `json:"value"`
-		Domain   *Term     `json:"domain"`
-		Body     Body      `json:"body"`
-	}
-
 	// With represents a modifier on an expression.
 	With struct {
 		Location *Location `json:"-"`
